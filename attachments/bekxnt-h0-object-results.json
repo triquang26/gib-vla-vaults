@@ -1,0 +1,43 @@
+{
+  "base": "libero_object",
+  "ckpt": "outputs/object",
+  "neps": 15,
+  "ntasks": 10,
+  "rows": [
+    {
+      "dim": "clean",
+      "suite": "libero_object",
+      "SR": 1.0,
+      "successes": 150,
+      "episodes": 150
+    },
+    {
+      "dim": "object",
+      "suite": "libero_object_object",
+      "SR": 0.9,
+      "successes": 135,
+      "episodes": 150
+    },
+    {
+      "dim": "swap",
+      "suite": "libero_object_swap",
+      "SR": 0.0,
+      "successes": 0,
+      "episodes": 150
+    },
+    {
+      "dim": "lan",
+      "suite": "libero_object_lan",
+      "SR": 1.0,
+      "successes": 150,
+      "episodes": 150
+    },
+    {
+      "dim": "task",
+      "suite": "libero_object_task",
+      "SR": 0.0933,
+      "successes": 14,
+      "episodes": 150
+    }
+  ]
+}
