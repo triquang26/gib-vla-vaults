@@ -5,7 +5,7 @@ Root nodes (no parent) appear here automatically when you run `/exp-new`.
 ## Roots
 
 <!-- ROOTS_START -->
-(none yet)
+- [[2026-06-bekxnt-h0-stablevla-libero-pro-baseline]] — h0-stablevla-libero-pro-baseline
 <!-- ROOTS_END -->
 
 ## Conventions
