@@ -26,7 +26,7 @@ H0 (bekxnt) baseline/diagnosis
          └─ H5 (5wtdmq) translational equivariance ..... NULL (training-only; clean held)
       └─ H6 (k2gwp2) VisualServo-TTA gate .......... DECISIVE: in-model localizer MEMORIZES (can't localize moved object)
          └─ H7 (5i0j20) HARD residual coord injection . CONDITIONAL GREENLIGHT: 1st mechanism to MOVE swap; needs off-dist data
-            └─ H8 (ocdaey) translation-equivariance aug . NULL: forces coord (loc_proj 2×) but proprio-OOD; needs RE-RENDER
+            └─ H8 (ocdaey) translation-equivariance aug . NULL: forces coord (loc_proj 2×) but swap unchanged; proprio-OOD
 ```
 
 ## Results so far (swap / task / clean, vs base = released checkpoint)
@@ -106,8 +106,8 @@ through the residual channel, not a representation the head can ignore.
 **H8 (ocdaey) — cheap data-free forcing is insufficient.** Tried to supply the off-distribution signal
 WITHOUT a re-render via translation-equivariance augmentation: shift the injected coordinate AND the proprio
 eef-xyz by the same random Δ, action unchanged (a delta-eef reach is translation-invariant). This forced the
-head to commit harder to the coordinate (`loc_proj` std doubled 0.0033→0.0065) — but swap reach got *worse*
-(0.126 vs blank=1.0's 0.105), and clean degraded too (0.063 vs 0.029). Cause: the shift pushes **proprio
+head to commit harder to the coordinate (`loc_proj` std doubled 0.0033→0.0065) — but swap reach did *not*
+improve (0.100 vs blank=1.0's 0.105) while clean degraded (0.060 vs 0.029). Cause: the shift pushes **proprio
 off-manifold** (Δ=0.10 m in x ⇒ ±0.83 in normalized proprio-x, scale only 0.12), so train (shifted proprio)
 ≠ eval (real proprio) — a distribution mismatch that wrecks reach calibration. **Lesson:** a clean
 off-distribution signal cannot be faked by perturbing proprio; it needs **real proprio at relocated object

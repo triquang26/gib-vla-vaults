@@ -14,7 +14,7 @@ date-created: 2026-06-04
 date-started: 2026-06-04
 date-completed: 2026-06-04
 tags: [position-swap, translation-equivariance, augmentation, off-distribution, reach-metric, null-result, proprio-ood]
-metrics: {reach_metric: min_xy_eef_to_target, eval_ep_per_dim: 50, clean_h8: 0.063, swap_h8: 0.126, task_h8: 0.065, clean_blank10: 0.029, swap_blank10: 0.105, loc_proj_std_h8: 0.0065, loc_proj_std_blank10: 0.0033}
+metrics: {reach_metric: min_xy_eef_to_target, eval_ep_per_dim: 50, clean_h8: 0.060, swap_h8: 0.100, task_h8: 0.089, clean_blank10: 0.029, swap_blank10: 0.105, loc_proj_std_h8: 0.0065, loc_proj_std_blank10: 0.0033}
 ---
 
 # ocdaey — h8-translation-equivariance-augment
@@ -34,16 +34,17 @@ re-rendered); keep proprio. Warm-start 2500 steps, `libero_object_no_noops`. Eva
 eef→true target) at 50 ep/dim, **blank vision + coord, proprio KEPT** (no proprio-zero). Code `gib-vla@c26e117`.
 
 ## Results
-| dim | H8 min-xy | blank=1.0 | Δ |
+| dim | H8 min-xy (n=50) | blank=1.0 | Δ |
 |---|---|---|---|
-| clean | 0.063 | 0.029 | **+0.034 (worse)** |
-| swap | **0.126** | 0.105 | **+0.021 (worse)** |
-| task | 0.065 | 0.066 | ~0 |
+| clean | 0.060 | 0.029 | **+0.031 (worse)** |
+| swap | 0.100 | 0.105 | ~0 (**unchanged**) |
+| task | 0.089 | 0.066 | +0.023 (worse) |
 (50 ep/dim; binary success 0 under blank vision as expected; coord coverage 100%.)
 
 - `loc_proj.2` std **doubled** (0.0033 → 0.0065): the augmentation DID force the head to commit much harder
   to the coordinate channel (it can no longer memorize a fixed position).
-- **But swap reach got WORSE, not better** (0.126 vs 0.105), and clean degraded too (0.063 vs 0.029).
+- **But swap reach did NOT improve** (0.100 ≈ blank=1.0's 0.105) and clean+task degraded (clean 0.060 vs
+  0.029). So forced coord-commitment bought no swap generalization, at a cost to clean.
 
 ## Plots
 <!-- ![[attachments/loss-curve.png]] -->
@@ -51,7 +52,8 @@ eef→true target) at 50 ep/dim, **blank vision + coord, proprio KEPT** (no prop
 ## Conclusion
 **NULL / mildly NEGATIVE.** Forcing translational equivariance via blank-vision translation augmentation makes
 the head rely more on the coordinate (loc_proj doubles) but does **not** make the coord→reach map generalize
-to swap — it degrades both clean and swap. Diagnosed cause: the augmentation shifts the **proprio to
+to swap (swap reach unchanged at 0.100 vs blank=1.0's 0.105) and it degrades clean (0.060 vs 0.029) and task.
+Diagnosed cause: the augmentation shifts the **proprio to
 out-of-distribution absolute positions** during training (a Δ of 0.10 m in x maps to ±0.83 in normalized
 proprio-x, since the proprio-x scale is only 0.12), while eval uses real in-range proprio — a train/eval
 distribution mismatch that wrecks reach calibration. The translation trick cannot give a clean off-distribution
