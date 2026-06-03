@@ -1,0 +1,21 @@
+{
+  "base": "libero_object",
+  "neps": 10,
+  "ntasks": 10,
+  "arms": {
+    "base": "outputs/object",
+    "h5equiv": "outputs/h5equiv/configs_fusedfan+libero_object_no_noops+b16+lr-0.0001+lora-r64+dropout-0.0--image_aug--h5equiv-pair--2500_chkpt"
+  },
+  "results": {
+    "base": {
+      "clean": null,
+      "swap": null,
+      "task": null
+    },
+    "h5equiv": {
+      "clean": null,
+      "swap": null,
+      "task": null
+    }
+  }
+}

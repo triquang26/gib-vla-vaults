@@ -23,7 +23,8 @@ H0 (bekxnt) baseline/diagnosis
       ├─ H2b + counterfactual rebinding .............. NULL on swap
       └─ H2c in-model action_queries modulation ...... coded, superseded
       └─ H4 (j38ajw) proprio-xyz dropout ............. NULL  → proprio RULED OUT
-         └─ H5 (5wtdmq) translational equivariance ..... ← RUNNING (equiv term active: curr 0.02→0.10)
+         └─ H5 (5wtdmq) translational equivariance ..... NULL (active but training-only; clean held)
+      └─ H6 (math, bold) ............................ ← current frontier (test-time / by-construction)
 ```
 
 ## Results so far (swap / task / clean, vs base = released checkpoint)
