@@ -2,7 +2,8 @@
 id: ih0sga
 slug: h2-grasp-anchored-grounding
 type: experiment
-status: active
+status: completed
+date-completed: 2026-06-03
 hypothesis: |
   Position-swap collapse (swap=0.00) is a spatial-grounding failure: the policy grasps the
   remembered location, not the named object. Fix data-free with a real-transferable supervision
@@ -72,7 +73,15 @@ indirectly via the shared LoRA representation. ⇒ the intervention must **reach
       **swap 0.00**, task 0.24 (vs base 1.00/0.00/0.26). The localizer's grasp_loss fell 0.031→0.012
       (it *did* learn to localize), yet swap stays floored ⇒ instruction-conditional grounding of the
       *representation* still does not change the action. Stopped early; swap 0/34 is conclusive.
-- [ ] **H2c (running):** in-model `TargetLocalizer` adds a zero-init modulation to the `action_queries`
-      ⇒ the ACTION is explicitly conditioned on the localized target (the escalation the H2a+H2b nulls demand).
-- [ ] If a variant lifts swap, promote it to its own node via `/exp-branch`.
-- [ ] If H2c also nulls: re-plan — see new hypothesis sweep (action-side / training-distribution / inference-time).
+- [x] **H2c — coded, SUPERSEDED (not cleanly evaluated).** In-model `TargetLocalizer` adds a zero-init
+      modulation to `action_queries` (full PEFT integration: explicit LoRA target list excluding the
+      localizer + merge-copy of the trained module; identity-at-init verified, grasp_loss decreased). The
+      run got tangled by rapid relaunches, and the re-hypothesize workflow then showed H2c is the SAME
+      failure class (zero-init modulation has no L1 gradient to activate while proprio/position stays a
+      sufficient statistic) → not worth a clean re-run. Code is on the branch for reuse by H5.
+- [x] **Conclusion of the H2 family: NULL on swap.** Grasp-proprio is a clean, novel, real-transferable
+      localization label and the head provably learns it (grasp_loss↓), but representation-grounding never
+      reaches the action. This motivated [[2026-06-j38ajw-h4-proprio-shortcut]] (H4, also null → proprio
+      ruled out) and the mathematically-principled **H5** phase (position-equivariance / conditional-MI).
+- [ ] Reusable assets for H5: `grasp_target` data label (object 3D location, free), `TargetLocalizer`
+      (visual object-location read), `scripts/train_warmstart.sh` + `eval_compare.sh`.

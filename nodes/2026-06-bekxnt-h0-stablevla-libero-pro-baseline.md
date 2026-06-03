@@ -65,4 +65,11 @@ Fresh isolated env `gibvla` (py3.10.16, torch2.2.0+cu121, flash-attn2.5.5, LIBER
 **Opens up → next:** position is the worst + cleanest target. Lean **H2 (object presence+position grounding head, data-free, targets position)** as the first pilot; H1 (language-conditioned gate) targets task/semantic but task is fragile (1-task) and lan is ceiling. Decide via /exp-plan.
 
 ## Next directions
-- [ ] <Claude Code có thể fill khi /exp-plan>
+- [x] Focus all hypotheses on the two collapse dims **swap (position)=0.00** + **task=0.093** (+ clean guard).
+      Children spawned: [[2026-06-0jw4rh-h1-langcond-gate]] (H1), [[2026-06-ih0sga-h2-grasp-anchored-grounding]]
+      (H2 family), [[2026-06-j38ajw-h4-proprio-shortcut]] (H4).
+- [x] Result of the whole H1→H4 sweep (see those nodes): every *representation-grounding* fix is NULL on
+      swap; proprio is also ruled out → the cause is the **action objective / vision patch-index**. Now in
+      the mathematically-principled **H5** phase (equivariance / conditional-MI).
+- [ ] (rigor backlog) VLA-Adapter through the same harness; ≥3 seeds w/ CIs; env-perturbation dim;
+      `task` feed-original-instruction control.
