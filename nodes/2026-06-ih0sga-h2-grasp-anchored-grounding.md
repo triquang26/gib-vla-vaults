@@ -25,7 +25,7 @@ date-created: 2026-06-03
 date-started: 2026-06-03
 date-completed: null
 tags: [grounding, position-swap, grasp-pose, data-free, real-transferable]
-metrics: {h2a_clean_base: 1.00, h2a_clean: 0.94, h2a_swap_base: 0.00, h2a_swap: 0.00, h2a_task_base: 0.10, h2a_task: 0.09, eval_episodes_per_dim: 100}
+metrics: {h2a_clean_base: 1.00, h2a_clean: 0.94, h2a_swap_base: 0.00, h2a_swap: 0.00, h2a_task_base: 0.10, h2a_task: 0.09, h2b_clean: 0.95, h2b_swap: 0.00, h2b_task: 0.24, h2a_eval_ep: 100, h2b_eval_ep: 34}
 ---
 
 # ih0sga — h2-grasp-anchored-grounding
@@ -68,8 +68,11 @@ loss by memorizing object→position, and even when it localizes, the grounding 
 indirectly via the shared LoRA representation. ⇒ the intervention must **reach the action explicitly**.
 
 ## Next directions
-- [ ] **H2b (running):** counterfactual instruction-rebinding — wrong instruction ⇒ push prediction
-      ≥margin off the grasp location, forcing instruction-conditional (vs scene-memorized) localization.
-- [ ] **H2c (coded, awaiting GPU smoke-test):** in-model `TargetLocalizer` that adds a zero-init
-      modulation to the `action_queries` ⇒ the ACTION is conditioned on the localized target.
+- [x] **H2b — NULL** (counterfactual instruction-rebinding, warm-start 2500, 34 ep/dim): clean 0.95,
+      **swap 0.00**, task 0.24 (vs base 1.00/0.00/0.26). The localizer's grasp_loss fell 0.031→0.012
+      (it *did* learn to localize), yet swap stays floored ⇒ instruction-conditional grounding of the
+      *representation* still does not change the action. Stopped early; swap 0/34 is conclusive.
+- [ ] **H2c (running):** in-model `TargetLocalizer` adds a zero-init modulation to the `action_queries`
+      ⇒ the ACTION is explicitly conditioned on the localized target (the escalation the H2a+H2b nulls demand).
 - [ ] If a variant lifts swap, promote it to its own node via `/exp-branch`.
+- [ ] If H2c also nulls: re-plan — see new hypothesis sweep (action-side / training-distribution / inference-time).
