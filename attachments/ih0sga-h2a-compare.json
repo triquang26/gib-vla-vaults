@@ -1,0 +1,45 @@
+{
+  "base": "libero_object",
+  "neps": 10,
+  "ntasks": 10,
+  "arms": {
+    "base": "outputs/object",
+    "h2a": "outputs/h2a/configs_fusedfan+libero_object_no_noops+b16+lr-0.0001+lora-r64+dropout-0.0--image_aug--h2a-graspground--2500_chkpt"
+  },
+  "results": {
+    "base": {
+      "clean": [
+        1.0,
+        100,
+        100
+      ],
+      "swap": [
+        0.0,
+        0,
+        100
+      ],
+      "task": [
+        0.1,
+        10,
+        100
+      ]
+    },
+    "h2a": {
+      "clean": [
+        0.94,
+        94,
+        100
+      ],
+      "swap": [
+        0.0,
+        0,
+        100
+      ],
+      "task": [
+        0.09,
+        9,
+        100
+      ]
+    }
+  }
+}

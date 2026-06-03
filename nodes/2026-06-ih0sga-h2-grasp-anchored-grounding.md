@@ -25,7 +25,7 @@ date-created: 2026-06-03
 date-started: 2026-06-03
 date-completed: null
 tags: [grounding, position-swap, grasp-pose, data-free, real-transferable]
-metrics: {}
+metrics: {h2a_clean_base: 1.00, h2a_clean: 0.94, h2a_swap_base: 0.00, h2a_swap: 0.00, h2a_task_base: 0.10, h2a_task: 0.09, eval_episodes_per_dim: 100}
 ---
 
 # ih0sga — h2-grasp-anchored-grounding
@@ -39,16 +39,37 @@ warm-start from outputs/object; eval only the collapse dims (swap, task) + clean
 tweak insufficient → move the intervention to a supervision-side localization objective.
 
 ## Method
-<điền khi /exp-record>
+Free, real-transferable localization label: `batch["grasp_target"]` = eef xyz at the grasp moment
+(gripper fingers most closed = where the named object is), added to the RLDS pipeline (env-gated
+`GIBVLA_GRASP_TARGET=1`), verified clean+discriminative. Code `gib-vla` branch `exp/ih0sga`.
+
+**H2a (this result):** an explicit, instruction-conditioned localization aux head
+(`prismatic/util/grasp_head.py`: pooled instruction *queries* the projected visual patches via
+cross-attention → MLP → 3D), trained jointly with the action loss (`weight·MSE(pred, grasp_target)`,
+weight 1.0). Warm-start from `outputs/object`, 2500 steps, batch 16, lr 1e-4. Eval (`scripts/eval_compare.sh`,
+matched 100 ep/dim) vs baseline on swap+task+clean.
 
 ## Results
-<điền khi /exp-record>
+| dim | base (`outputs/object`) | H2a (grasp head, 2500) | Δ |
+|---|---|---|---|
+| clean | 1.00 (100/100) | 0.94 (94/100) | −0.06 |
+| swap (position) | 0.00 (0/100) | 0.00 (0/100) | 0.00 |
+| task | 0.10 (10/100) | 0.09 (9/100) | −0.01 |
 
 ## Plots
 <!-- ![[attachments/...]] -->
 
 ## Conclusion
-<điền khi /exp-record>
+**H2a NULL on swap** (and mild clean regression). The aux head *grounds the visual representation*
+(forces it to predict the named object's location) but the **action policy does not use that
+grounding** — swap stays exactly floored at 0.00, task unchanged, clean −0.06. Diagnosis (matches the
+data): many libero-object objects sit at near-fixed training positions, so the head can satisfy the
+loss by memorizing object→position, and even when it localizes, the grounding only reaches the action
+indirectly via the shared LoRA representation. ⇒ the intervention must **reach the action explicitly**.
 
 ## Next directions
-- [ ] H2b counterfactual instruction-rebinding if H2a head-alone memorizes.
+- [ ] **H2b (running):** counterfactual instruction-rebinding — wrong instruction ⇒ push prediction
+      ≥margin off the grasp location, forcing instruction-conditional (vs scene-memorized) localization.
+- [ ] **H2c (coded, awaiting GPU smoke-test):** in-model `TargetLocalizer` that adds a zero-init
+      modulation to the `action_queries` ⇒ the ACTION is conditioned on the localized target.
+- [ ] If a variant lifts swap, promote it to its own node via `/exp-branch`.
