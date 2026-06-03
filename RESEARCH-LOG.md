@@ -26,7 +26,8 @@ H0 (bekxnt) baseline/diagnosis
          └─ H5 (5wtdmq) translational equivariance ..... NULL (training-only; clean held)
       └─ H6 (k2gwp2) VisualServo-TTA gate .......... DECISIVE: in-model localizer MEMORIZES (can't localize moved object)
          └─ H7 (5i0j20) HARD residual coord injection . CONDITIONAL GREENLIGHT: 1st mechanism to MOVE swap; needs off-dist data
-            └─ H8 (ocdaey) translation-equivariance aug . NULL: forces coord (loc_proj 2×) but swap unchanged; proprio-OOD
+            ├─ H8 (ocdaey) translation-equivariance aug . NULL: forces coord (loc_proj 2×) but swap unchanged; proprio-OOD
+            └─ H9 (5lsz9w) co-translation (2×2 Jacobian) ... NULL: hardest coord-commit (loc_proj 0.0086) but relabel too imprecise
 ```
 
 ## Results so far (swap / task / clean, vs base = released checkpoint)
@@ -114,6 +115,21 @@ off-distribution signal cannot be faked by perturbing proprio; it needs **real p
 positions** = an actual env re-render (object physically moved → in-range proprio + matching scene + a
 scripted/expert or demo-geometry action). That re-render route + the validated residual coord channel + a
 learned localizer is the remaining path to an actual swap win.
+
+**H9 (5lsz9w) — data-free action-relabel is too fragile (the REACH-COMMIT wall).** After H8 ruled out
+perturbing proprio, H9 kept proprio REAL and instead CO-TRANSLATED the action: on a fraction of frames, shift
+the injected coord by Δ and shift the action's lateral xy by `J@Δ`, where J is a full 2×2 image/world→action
+Jacobian (the eef/action frame is ~90° rotated vs world — J off-diagonal −21.9 — so a diagonal gain gave a
+broken negative-y; only the full 2×2 works). This forced the **hardest coordinate-commitment of any arm**
+(`loc_proj` std 0.0033→0.0065→**0.0086**) — proving the *mechanism* (decorrelate coord from proprio with
+in-range proprio) is sound — **but reach did NOT improve** (swap 0.134 vs H7 0.105; clean 0.040 vs 0.029).
+Cause: the 8-step chunk is only a *partial* reach, so the cumulative-action↔displacement Jacobian is
+phase-averaged and under-shoots; a constant 2×2 corrupts the coord→action map, which the hard-committed
+`loc_proj` faithfully reproduces. **Verdict across H7→H9: the coordinate channel reliably moves swap HALFWAY
+(H7 0.105 = best), but every data-free push that perturbs/relabels the ACTION (H8 proprio-shift, H9
+action-relabel) is too fragile to beat it.** A clean off-distribution *action* label needs the env (forbidden)
+or a precise per-step Jacobian from the proprio SEQUENCE (not the chunk). The GROUND gap (content localizer)
+is untouched and orthogonal — H7's halfway-coord could still be paired with a real localizer.
 
 ## (superseded) earlier frontier — H5 (mathematically-principled)
 
