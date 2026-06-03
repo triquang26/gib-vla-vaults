@@ -23,8 +23,8 @@ H0 (bekxnt) baseline/diagnosis
       ├─ H2b + counterfactual rebinding .............. NULL on swap
       └─ H2c in-model action_queries modulation ...... coded, superseded
       └─ H4 (j38ajw) proprio-xyz dropout ............. NULL  → proprio RULED OUT
-         └─ H5 (5wtdmq) translational equivariance ..... NULL (active but training-only; clean held)
-      └─ H6 (math, bold) ............................ ← current frontier (test-time / by-construction)
+         └─ H5 (5wtdmq) translational equivariance ..... NULL (training-only; clean held)
+      └─ H6 (k2gwp2) VisualServo-TTA gate .......... DECISIVE: in-model localizer MEMORIZES (can't localize moved object)
 ```
 
 ## Results so far (swap / task / clean, vs base = released checkpoint)
@@ -52,7 +52,17 @@ H0 (bekxnt) baseline/diagnosis
    objective, so no gradient flows to grounding. **The fix must change the ACTION OBJECTIVE so that reading
    the named object's current location becomes NECESSARY to minimize the loss.**
 
-## Current frontier — H5 (mathematically-principled)
+## Bedrock finding (H6 gate, the sharpest result)
+
+A head trained EXPLICITLY to localize the named object (grasp_loss→0.007 on train) **cannot localize it at a
+new position** on swap (prediction shift 0.03–0.12 vs object shift 0.18–0.25; direction cos ≤ 0). The model's
+learned visual features encode object position by **memorization, not content** — so there is NO internal,
+position-invariant "where is the object" signal for any in-model / data-free method to exploit. This is WHY
+H1–H6 all null. ⇒ **Position-swap robustness requires an EXTERNAL position-invariant grounding** (open-vocab
+detector on the live pixel) — the real-transferable signal that works on real robots, blocked here only by the
+LIBERO sim-to-real detector gap.
+
+## (superseded) earlier frontier — H5 (mathematically-principled)
 
 Stop adding signals beside a sufficient statistic; instead encode the **symmetry the swap benchmark
 measures**. Candidates under design (workflow `h5-math-design`):
