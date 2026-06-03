@@ -1,0 +1,325 @@
+{
+  "summary": "Deep research harness — fan-out web searches, fetch sources, adversarially verify claims, synthesize a cited report.",
+  "agentCount": 104,
+  "logs": [
+    "Q: What is the genuinely NOVEL, publishable research contribution for improving Vis…",
+    "Decomposed into 5 angles: benchmarks: grounding vs perceptual robustness axes, auxiliary detector-pseudo-label grounding / spatial heads for policies, counterfactual / shortcut-breaking augmentation without teleop, language-conditioned / conditional information bottleneck in policies, why language conditioning fails / small-VLA grounding null result positioning",
+    "why language conditioning fails / small-VLA grounding null result positioning: 6 results",
+    "benchmarks: grounding vs perceptual robustness axes: 6 results",
+    "auxiliary detector-pseudo-label grounding / spatial heads for policies: 6 results",
+    "auxiliary detector-pseudo-label grounding / spatial heads for policies: 4 novel (2 filtered)",
+    "language-conditioned / conditional information bottleneck in policies: 6 results",
+    "language-conditioned / conditional information bottleneck in policies: 3 novel (3 filtered)",
+    "counterfactual / shortcut-breaking augmentation without teleop: 6 results",
+    "counterfactual / shortcut-breaking augmentation without teleop: 3 novel (3 filtered)",
+    "Fetched 22 sources → 68 claims → verifying top 25",
+    "\"VLA models ignore instruction semantics: they outp…\": 3-0 ✓",
+    "\"Position/spatial perturbation specifically causes …\": 3-0 ✓",
+    "\"LIBERO-Plus empirically shows that VLA models rely…\": 3-0 ✓",
+    "\"LIBERO-PRO evaluates VLA robustness along four ort…\": 3-0 ✓",
+    "\"Existing VLA models that score over 90% on standar…\": 3-0 ✓",
+    "\"VLABench evaluates language-conditioned manipulati…\": 3-0 ✓",
+    "\"VLA models are largely insensitive to language and…\": 0-3 ✗",
+    "\"The benchmark isolates grounding/spatial axes (obj…\": 1-2 ✗",
+    "\"COLOSSEUM evaluates manipulation generalization ac…\": 3-0 ✓",
+    "\"VLABench targets world-knowledge/common-sense tran…\": 1-2 ✗",
+    "\"The paper's proposed remedy for these grounding/po…\": 3-0 ✓",
+    "\"VLA performance collapses under spatial/embodiment…\": 3-0 ✓",
+    "\"LIBERO-plus empirically finds that current VLA mod…\": 3-0 ✓",
+    "\"LIBERO-plus is a benchmark for VLA robustness that…\": 2-1 ✓",
+    "\"The only mitigation proposed in LIBERO-plus is Ope…\": 3-0 ✓",
+    "\"ObjectVLA achieves open-world generalization to no…\": 3-0 ✓",
+    "\"ReconVLA's grounding objective is a reconstruction…\": 3-0 ✓",
+    "\"ReconVLA already publishes an auxiliary detector-p…\": 2-1 ✓",
+    "\"ObjectVLA targets OBJECT (semantic/appearance) gen…\": 3-0 ✓",
+    "\"RoboPoint is a VLM that outputs language-condition…\": 3-0 ✓",
+    "\"ReconVLA's evaluation isolates the grounding probl…\": 3-0 ✓",
+    "\"The grounding training data is generated WITHOUT a…\": 3-0 ✓",
+    "\"Shortcut learning in generalist robot policies has…\": 3-0 ✓",
+    "\"RoboPoint's grounding supervision comes entirely f…\": 3-0 ✓",
+    "\"The paper isolates SPATIAL/POSITION grounding as t…\": 2-1 ✓",
+    "Verify done: 25 claims → 22 confirmed, 3 killed"
+  ],
+  "result": {
+    "question": "What is the genuinely NOVEL, publishable research contribution for improving Vision-Language-Action (VLA) model GROUNDING and COMPOSITIONAL robustness (object / position-swap / instruction-semantic / task generalization) on the LIBERO-PRO benchmark WITHOUT collecting extra teleoperation data — for a small (~0.5B) VLA? Research context to ground the search: (1) StableVLA (ICML 2026, Qwen2.5-0.5B + DINO-SigLIP, \"Fused IB-Adapter\") uses a vision-only information-bottleneck / channel-gating adapter that gives PERCEPTUAL robustness (ImageNet-C corruptions) but this does NOT transfer to GROUNDING robustness; (2) we empirically found that data-free language-conditioning of that vision gate (FiLM on the channel gate) FAILS to fix position-swap collapse (swap success stays 0%); (3) the training data (openvla RLDS LIBERO) contains NO object poses, only robot proprioception. Investigate these angles and report what is ALREADY DONE vs the OPEN NOVELTY GAP: (a) VLA robustness/generalization benchmarks that isolate grounding vs perceptual robustness — LIBERO-PRO (arXiv 2510.03827), VLABench, GemBench, Colosseum, KitchenShift, compositional-generalization suites — and which robustness axes each measures; (b) whether adding an AUXILIARY OBJECT-GROUNDING / LOCALIZATION objective to a manipulation policy or VLA using OPEN-VOCABULARY DETECTOR pseudo-labels (OWL-ViT, Grounding-DINO) or spatial/keypoint heads is ALREADY PUBLISHED (e.g., 3D-VLA, RoboPoint, SpatialVLA, PerAct, keypoint-conditioned policies, \"where2act\"-style) — is \"detector-pseudo-label aux grounding head for VLA position robustness\" novel?; (c) counterfactual / shortcut-breaking data augmentation that defeats spatial-MEMORIZATION shortcuts in robot policies WITHOUT new teleop (object-swap re-rendering, position randomization, abstain-or-rebind supervision); (d) information-bottleneck and language-conditioned representation learning in VLAs/policies — is \"language-conditioned information bottleneck\" a novel framing or already explored (conditional IB, IB for RL/imitation, CLIP-style conditioning); (e) the strongest under-explored NOVELTY positioning for a small-VLA grounding-robustness paper given a NULL result on the data-free representation tweak. Prioritize 2024-2026 arXiv/CVPR/CoRL/ICLR/RSS papers. Conclude with the 2-3 most defensible novelty angles and which are already taken.",
+    "summary": "For a small (~0.5B) VLA targeting LIBERO-PRO-style grounding/compositional robustness WITHOUT extra teleop, the strongest defensible novelty is NOT \"isolate grounding from perceptual robustness\" (already done by LIBERO-PRO and LIBERO-Plus), NOT \"auxiliary detector-pseudo-label grounding objective\" (already published by ReconVLA via Grounding-DINO gaze-region pseudo-labels, and adjacent in ObjectVLA/RoboPoint), and NOT \"data scaling re-rendering\" (LIBERO-Plus's mix-SFT of 20k+ trajectories already occupies that). The position-swap/spatial-memorization collapse is a documented, named failure mode (\"positional bias\", LIBERO-Plus Finding 5; OpenVLA/pi0 -> 0% beyond 0.2-unit displacement, LIBERO-PRO) that is empirically distinct from perceptual fragility, and the project's own null result (FiLM language-conditioning of a vision IB gate fails to fix swap collapse) is consistent with the field finding that VLAs ignore language and run as Vision-Action models. The genuinely OPEN gap is therefore narrowly scoped: (1) a DATA-FREE counterfactual/shortcut-breaking mechanism that specifically defeats spatial position-memorization on existing RLDS LIBERO (with NO object poses) and forces language-conditioned rebinding — distinct from RoboPoint's sim-GT pipeline, ObjectVLA's VL-pair object co-training, and LIBERO-Plus's new-trajectory generation; and (2) an EXPLICIT detection/localization/keypoint head (vs ReconVLA's latent reconstruction loss) driven by open-vocab-detector pseudo-labels and evaluated specifically on the position-swap/instruction-semantic LIBERO-PRO axes, which no existing paper does. The cleanest publishable framing is a small-VLA, data-free, position-swap-grounding contribution that pairs a counterfactual/abstain-or-rebind supervision signal with an explicit (non-reconstruction) detector-pseudo-label localization head, validated on the grounding-vs-perceptual split — with the FiLM-on-IB-gate null result reframed as evidence that representation tweaks are insufficient and supervision-side counterfactuals are required.",
+    "findings": [
+      {
+        "claim": "Benchmarks that ISOLATE grounding/compositional axes from perceptual robustness already exist and are well-established — LIBERO-PRO (4 orthogonal axes: manipulated objects, initial states/positions, task instructions, environments) and LIBERO-Plus (7 axes separating objects-layout/language from light/background/sensor-noise and from camera/robot-init), plus VLABench (6 reasoning/grounding/spatial dimensions). COLOSSEUM, by contrast, is purely perceptual/physical (14 axes: color/texture/size/lighting/distractors/camera/physics) with the instruction and target held FIXED, so it does NOT isolate grounding. This means the 'introduce a benchmark that separates grounding from perceptual robustness' angle is ALREADY TAKEN.",
+        "confidence": "high",
+        "sources": [
+          "https://arxiv.org/abs/2510.03827",
+          "https://arxiv.org/abs/2510.13626",
+          "https://github.com/sylvestf/LIBERO-plus",
+          "https://arxiv.org/html/2412.18194v1",
+          "https://arxiv.org/abs/2402.08191"
+        ],
+        "evidence": "LIBERO-PRO: 'controlled perturbations across four orthogonal dimensions, manipulated objects, initial states, task instructions, and environments' with dedicated object-identity (5.3), instruction (5.4), spatial (5.5), compositional (5.6) experiments. LIBERO-Plus: 7 dimensions (objects layout, camera viewpoints, robot initial states, language instructions, light, background, sensor noise), 10,030 tasks. VLABench: 6 dimensions including semantically-rich instruction comprehension, spatial understanding, reasoning. COLOSSEUM: 14 axes all perceptual/physical with instruction+target fixed; Distractors axis adds clutter but does NOT swap target identity or rebind instruction.",
+        "vote": "3-0 (LIBERO-PRO axes), 2-1 (LIBERO-Plus 7-axis taxonomy), 3-0 (VLABench), 3-0 (COLOSSEUM perceptual-only)"
+      },
+      {
+        "claim": "Position/spatial memorization is a documented, NAMED, empirically-isolated failure mode that is distinct from perceptual fragility — directly corroborating the project's observed position-swap=0% collapse. LIBERO-Plus names it 'positional bias' (Finding 5: models ignore distractors fine but fail when the TARGET is displaced, relying on memorized positional cues not invariant object semantics). LIBERO-PRO shows OpenVLA/pi0 -> 0% success once displacement exceeds 0.2 units (pi0.5 sustains to 0.4 units, 0.38 on libero-goal). Both attribute >90%-standard-LIBERO scores to rote memorization of action sequences and layouts, not grounding.",
+        "confidence": "high",
+        "sources": [
+          "https://arxiv.org/abs/2510.13626",
+          "https://arxiv.org/abs/2510.03827",
+          "https://github.com/sylvestf/LIBERO-plus"
+        ],
+        "evidence": "LIBERO-Plus Finding 5 verbatim: 'Current VLAs exhibit positional bias rather than genuine semantic understanding... they rely on memorized positional cues rather than learning invariant object semantics.' LIBERO-PRO: 'for both OpenVLA and pi0, performance collapses once displacement exceeds 0.2 units, dropping to zero success, while pi0.5... sustains non-trivial accuracy up to 0.4 units'; 'over 90% accuracy under standard LIBERO... collapses to 0.0% under our generalized setting... reliance on rote memorization of action sequences and environment layouts.' LIBERO-Plus also separates camera (0.8%) and robot-init (3.5%) embodiment axes from perceptual ones.",
+        "vote": "3-0 (Finding 5 positional bias), 3-0 (0.2-unit collapse numbers), 3-0 (90%->0% memorization)"
+      },
+      {
+        "claim": "The project's null result (FiLM language-conditioning of the vision IB gate fails to fix swap collapse) is consistent with the independently-replicated field finding that VLAs largely IGNORE language and behave as Vision-Action models — meaning naive language-conditioning of a vision pathway is expected to fail, and a stronger supervision-side intervention is required. This is a real grounding/language-utilization gap, not perceptual fragility: models output identical trajectories under corrupted instructions ('xxx', 'fdsgfdsgsd') and under target-object swaps.",
+        "confidence": "high",
+        "sources": [
+          "https://github.com/sylvestf/LIBERO-plus",
+          "https://arxiv.org/abs/2510.03827"
+        ],
+        "evidence": "LIBERO-Plus key finding verbatim: 'Language Ignorance: Models largely ignore language instructions, functioning more like Vision-Action models'; the apparent language-robustness is misleading because it stems from ignoring linguistic input, and swapping the target object in the instruction drives success 'nearly to zero.' LIBERO-PRO: 'their outputs remain unchanged even when given corrupted instructions or even messy tokens'; 'when substituting salad dressing with an unrelated object... the model still executed the same action trajectory.' Convergent 2025-2026 replications cited in-verification: CAST, LIBERO-CF/'When Vision Overrides Language', LangGap, LIBERO-Para, BayesianVLA/LangForce. NOTE: a strong-form claim that 'naive language conditioning is unlikely to help' was REFUTED 0-3 as an overreach on one source — so frame this as supportive context for the null result, not a proven impossibility.",
+        "vote": "3-0 (language ignorance/vision-action), 3-0 (identical trajectory under corrupted instr + object swap); related strong-form claim REFUTED 0-3"
+      },
+      {
+        "claim": "Auxiliary detector-pseudo-label grounding objectives for VLAs are ALREADY PUBLISHED — ReconVLA fine-tunes Grounding-DINO (open-vocab detector) to pseudo-label the instructed 'gaze region' (target object) over 100k trajectories / 2M samples and trains it jointly with the action loss. So 'open-vocab-detector pseudo-labels driving an auxiliary grounding objective for VLA target localization' is NOT novel as a general idea. HOWEVER, ReconVLA's objective is a latent-space RECONSTRUCTION loss (a diffusion transformer denoises target-region tokens), explicitly NOT a detection/bbox/keypoint/localization head — leaving the EXPLICIT localization-head variant a distinct, still-open design point.",
+        "confidence": "high",
+        "sources": [
+          "https://arxiv.org/abs/2508.10333"
+        ],
+        "evidence": "ReconVLA: 'we fine-tune Grounding DINO... state-of-the-art open-vocabulary object detector, to segment out the gaze region the robot is instructed to interact with... 100k trajectories and 2 million samples'; objective is 'a lightweight diffusion transformer... conditioned on the visual outputs of the VLA model [that] aims to reconstruct the target manipulated region from noise.' Official repo: 'This approach differs from traditional detection or bounding-box heads—it's a latent-space reconstruction task... rather than predicting explicit coordinates or object detections.' Paper's own taxonomy separates explicit-grounding / CoT-grounding / implicit(reconstruction)-grounding; ReconVLA occupies none of the coordinate/detection slots.",
+        "vote": "2-1 (detector-pseudo-label aux objective not novel), 3-0 (reconstruction loss not a detection/keypoint head -> explicit-head slot still open)"
+      },
+      {
+        "claim": "ReconVLA does NOT close the LIBERO-PRO position-swap gap: it frames grounding as DISPERSED VISUAL ATTENTION, validates on CALVIN long-horizon + real-world unseen-OBJECT generalization (and standard LIBERO suites), was submitted before LIBERO-PRO existed, and does NOT target position-swap or instruction-semantic robustness axes. So the position-swap-collapse problem and the grounding-vs-perceptual split remain unaddressed by an explicit, swap-evaluated grounding head.",
+        "confidence": "high",
+        "sources": [
+          "https://arxiv.org/abs/2508.10333",
+          "https://arxiv.org/abs/2510.03827"
+        ],
+        "evidence": "ReconVLA abstract: 'current VLAs struggle to allocate visual attention to target regions. Instead, visual attention is always dispersed.' Evaluated on CALVIN + real-world unseen-object generalization (and LIBERO suites per repo), submitted 2025-08-14 vs LIBERO-PRO 2025-10-04 — could not evaluate position-swap. Reported generalization is object-level, not position-swap or instruction-paraphrase.",
+        "vote": "3-0"
+      },
+      {
+        "claim": "The 'data-free / no-extra-teleop' object-generalization strategy is partly PRECEDENTED but bounded to OBJECT-IDENTITY, not position/spatial grounding. ObjectVLA co-trains a VLA on ~2k vision-language pairs (with bbox/localization metadata) to generalize to 100+ novel objects (64% OOD) with NO new teleop — bbox ablation is load-bearing (drops to 19% without). But ObjectVLA targets transferring a skill to a semantically-similar novel object, NOT position-swap or spatial-arrangement robustness, so the position-swap collapse axis (the project's null-result focus) remains UNADDRESSED.",
+        "confidence": "high",
+        "sources": [
+          "https://arxiv.org/abs/2502.19250"
+        ],
+        "evidence": "ObjectVLA: 'By leveraging vision-language pair data, the method provides a lightweight and scalable way to inject knowledge about the target object, establishing an implicit link between the object and the desired action.' 'primary challenge is object generalization, where a robot trained... with one object... struggles to transfer to a semantically similar but visually different object.' No-new-teleop for novel objects (still uses base-skill teleop + localization metadata); no position-swap evaluation.",
+        "vote": "3-0 (no-extra-teleop object precedent), 3-0 (bounded to object-identity, position-swap unaddressed)"
+      },
+      {
+        "claim": "Language-conditioned spatial-grounding / keypoint-affordance prediction is published (RoboPoint), but its grounding supervision comes from a SIMULATION pipeline using simulator ground-truth masks/mesh-surface intersections — NOT open-vocab-detector pseudo-labels, and NOT augmenting an existing real RLDS dataset, and it is a standalone VLM ('where to act' points consumed by an external motion planner) rather than an in-policy auxiliary head. This differentiates the 'detector-pseudo-label aux head on existing RLDS LIBERO' angle from RoboPoint and confirms the data-free constraint can be met via synthetic generation — but via a different data modality than RLDS augmentation.",
+        "confidence": "high",
+        "sources": [
+          "https://arxiv.org/abs/2406.10721"
+        ],
+        "evidence": "RoboPoint: 'instruction-tuned to point... point-based action space... fine-tuned using spatial affordance prediction, the task of pointing at where to act'; predicts 2D points -> depth-projected to 3D -> motion planner (does not emit robot actions). Supervision: 'generated in simulation by procedurally randomizing scene layouts, objects, and camera viewpoints... affordances are generated by sampling points within object masks and object-surface intersections'; 'requires no real-world data collection or human demonstration.' No OWL-ViT/Grounding-DINO and no real-data detector pseudo-labels in the affordance pipeline.",
+        "vote": "3-0 (VLM not VLA, language-conditioned keypoints), 3-0 (sim-GT not detector pseudo-labels), 3-0 (data-free via simulator, not RLDS augmentation)"
+      },
+      {
+        "claim": "Shortcut/spatial-memorization in generalist robot policies is framed by the field as a DATASET-DISTRIBUTION problem (limited intra-sub-dataset diversity + cross-sub-dataset fragmentation), and the same work directly studies position-memorization-vs-grounding on LIBERO-Spatial (object position + instruction = task-relevant; camera viewpoint = the spurious shortcut). Their proposed remedies are all DATA-SIDE augmentation, not a representation bottleneck or auxiliary head — and their shortcut cue is viewpoint-correlated-with-position, NOT the LIBERO-PRO object-position-SWAP protocol. This both supports counterfactual/shortcut-breaking augmentation as a direction AND leaves the specific position-SWAP, no-new-trajectory, representation+supervision angle open.",
+        "confidence": "high",
+        "sources": [
+          "https://arxiv.org/abs/2508.06426"
+        ],
+        "evidence": "'Two primary contributors to shortcut learning are (1) limited diversity within individual sub-datasets, and (2) significant distributional disparities across sub-datasets, leading to dataset fragmentation.' On LIBERO-Spatial: 'task-relevant factors (u) as the object's position and the corresponding language instruction. The camera viewpoint serves as the primary task-irrelevant factor (v).' Remedies are data-augmentation/collection strategies (no architectural/IB remedy tested). Shortcut axis = viewpoint correlated with position, a different perturbation than LIBERO-PRO swap.",
+        "vote": "3-0 (dataset-distribution root cause), 2-1 (isolates position-memorization-vs-grounding on LIBERO-Spatial; 'exact same failure mode' is mildly generous since cue is viewpoint not swap)"
+      },
+      {
+        "claim": "The published REMEDIES for these grounding/positional failures are brute-force NEW-DATA generation, not data-free representation/IB/aux-head methods — leaving the data-free angle open. LIBERO-Plus's only fix is OpenVLA-OFT+ mix-SFT on a 20,000+ re-rendered/expanded-trajectory dataset (79.6% avg, on a ~7B model); LIBERO-PRO proposes NO mitigation at all (diagnostic-only). No published LIBERO-PRO/Plus remedy uses an auxiliary object-grounding objective, detector pseudo-labels, counterfactual augmentation, or a language-conditioned information bottleneck.",
+        "confidence": "high",
+        "sources": [
+          "https://arxiv.org/abs/2510.13626",
+          "https://github.com/sylvestf/LIBERO-plus",
+          "https://arxiv.org/abs/2510.03827"
+        ],
+        "evidence": "LIBERO-Plus: 'highly automated generalization pipeline... over 20,000 successful trajectories through a substantial expansion of the original LIBERO benchmark... highest overall success rate (79.6%)'; released model 'openvla-7b-oft-finetuned-libero-plus-mixdata' (mix-SFT, ~7B base, no aux head/detector/counterfactual). LIBERO-PRO is diagnostic-only (performance collapses to 0.0%, no proposed fix). Base models are large (~7B), strengthening the open small-VLA + data-free angle.",
+        "vote": "3-0 (LIBERO-Plus remedy is 20k-trajectory mix-SFT), 3-0 (no aux/detector/counterfactual/IB remedy proposed)"
+      },
+      {
+        "claim": "SYNTHESIS — the 2-3 most defensible novelty angles for a small-VLA grounding-robustness paper given the FiLM-on-IB-gate null result. ANGLE A (strongest, mostly open): a DATA-FREE counterfactual / abstain-or-rebind SUPERVISION mechanism that breaks spatial position-memorization on existing RLDS LIBERO (which has NO object poses), forcing language-conditioned target rebinding — positioned against ObjectVLA (object-identity only), RoboPoint (sim-GT, separate VLM), and LIBERO-Plus (new trajectories). ANGLE B (open, must clear ReconVLA): an EXPLICIT detection/localization/keypoint head (NOT a reconstruction loss) supervised by open-vocab-detector (OWL-ViT/Grounding-DINO) pseudo-labels on existing frames, evaluated specifically on LIBERO-PRO position-swap + instruction-semantic axes. ANGLE C (riskiest/most novel framing): a LANGUAGE-CONDITIONED information bottleneck (conditional IB on the action-relevant target representation) — but the null result shows naive FiLM-conditioning of a vision gate fails, so this must be reframed at the supervision/objective level, not as a representation tweak. ALREADY TAKEN (avoid as headline): benchmark that isolates grounding vs perceptual; generic detector-pseudo-label aux grounding objective; data-scaling/re-rendering; object-identity-only generalization.",
+        "confidence": "medium",
+        "sources": [
+          "https://arxiv.org/abs/2510.03827",
+          "https://arxiv.org/abs/2510.13626",
+          "https://arxiv.org/abs/2508.10333",
+          "https://arxiv.org/abs/2502.19250",
+          "https://arxiv.org/abs/2406.10721",
+          "https://arxiv.org/abs/2508.06426"
+        ],
+        "evidence": "Derived by composing the verified claims: positional bias is named/isolated (LIBERO-Plus F5; LIBERO-PRO 0.2-unit collapse); language-ignorance explains the FiLM null; detector-pseudo-label aux objective is taken in GENERAL (ReconVLA) but its EXPLICIT-localization-head + position-swap-evaluation variant is not; data-free is feasible (RoboPoint/ObjectVLA) but neither addresses position-swap on real RLDS; remedies in the LIBERO-PRO/Plus literature are all new-trajectory data scaling. The 'language-conditioned information bottleneck' framing has no direct confirming claim in the verified set (no source confirmed conditional-IB-for-VLA as novel-or-taken), hence MEDIUM confidence and listed as the riskiest angle requiring its own lit check.",
+        "vote": "synthesis of 3-0/2-1 confirmed claims; the conditional-IB novelty sub-point is UNVERIFIED in this claim set"
+      }
+    ],
+    "caveats": "1) BENCHMARK-NAME CONFLATION: The research-question header labels the target benchmark 'LIBERO-PRO (arXiv 2510.03827)' but several of the strongest empirical claims (positional-bias Finding 5, language-ignorance, 7-axis taxonomy, 10,030 tasks, 79.6% mix-SFT remedy) actually come from the DIFFERENT, similarly-named LIBERO-Plus (arXiv 2510.13626, OpenMOSS). LIBERO-PRO (Zhou et al.) is diagnostic-only and proposes no fix; LIBERO-Plus proposes the 20k-trajectory mix-SFT remedy. Any paper must cite both correctly and not conflate them. 2) The 'conditional / language-conditioned information bottleneck' question (item d) is the WEAKEST-COVERED part of this report — NO claim in the verified set confirms whether conditional-IB-for-VLAs/policies is novel or already explored (CLIP-conditioning, IB-for-RL/imitation). Angle C therefore rests on the project's own null result plus inference, not on verified external sources; treat its novelty status as UNRESOLVED. 3) One strong-form claim ('naive language conditioning is unlikely to help, confirming FiLM should fail') was REFUTED 0-3 as an over-generalization from a single source — the language-ignorance finding SUPPORTS the null result but does not PROVE language conditioning cannot help; do not overclaim this. 4) Two split-vote (2-1) claims underpin parts of the synthesis: the LIBERO-Plus 7-axis tripartite meta-taxonomy (the 3-way grounding/perceptual/embodiment bucketing is the claimant's interpretation, not the paper's stated structure) and the 'ReconVLA detector-pseudo-label aux objective is not novel' claim (1 dissenter noted ReconVLA's reconstruction framing is narrower) — both are accurate at the load-bearing level but slightly interpretive. 5) Scope of precedents: ObjectVLA and RoboPoint operate on different data modalities (VL-pairs / simulator scenes) than the project's real openvla RLDS LIBERO setting; they bound novelty but do not directly preempt an RLDS-augmentation method. 6) Time-sensitivity: all key sources are Oct 2025 +/- with rapid 2026 follow-ups (LIBERO-CF, LangGap, LIBERO-Para, TAG, LIBERO-X, synthetic-instruction-augmentation for OpenVLA); the position-swap/grounding space is moving fast, so a fresh arXiv sweep right before submission is advised — some 2026 follow-ups may already occupy Angle A or B. 7) StableVLA (ICML 2026, Qwen2.5-0.5B + DINO-SigLIP, Fused IB-Adapter) itself was NOT independently verified in this claim set; its characterization is taken from the research context, not from a confirmed source.",
+    "openQuestions": [
+      "Is a LANGUAGE-CONDITIONED / CONDITIONAL information bottleneck (conditional IB on the action-relevant target representation) already published for VLAs or imitation/RL policies, or is it genuinely novel? This (item d) was not resolved by any verified claim and is the linchpin for whether Angle C is defensible — it needs its own targeted lit review (conditional IB, IB-for-RL, CLIP-style conditioning, variational IB in policies).",
+      "Has any 2026 follow-up (e.g., LIBERO-CF/'When Vision Overrides Language' 2602.17659, LangGap 2603.00592, BayesianVLA/LangForce 2601.15197, synthetic-instruction-augmentation 2603.16044, LIBERO-Para 2603.28301) ALREADY implemented a data-free counterfactual/abstain-or-rebind supervision that fixes position-swap collapse — i.e., has Angle A already been taken since the verified sources were collected?",
+      "Can a counterfactual object-swap / position-randomization signal be generated on existing RLDS LIBERO WITHOUT object poses (the dataset has only robot proprioception)? Concretely: do open-vocab-detector (Grounding-DINO/OWL-ViT) pseudo-labels on the existing camera frames provide enough target localization to synthesize counterfactual 'wrong-object'/'wrong-position' negatives or abstain supervision without re-rendering or new teleop?",
+      "Does an EXPLICIT localization/keypoint head (Angle B) actually transfer to position-swap robustness on a ~0.5B VLA, or does it inherit the same vision-shortcut/language-ignorance failure that defeated the FiLM-on-IB-gate approach — i.e., is the bottleneck the representation/head, or the supervision objective (counterfactual vs imitation)?",
+      "Is there a published result on whether SMALL (~0.5B) VLAs are differentially worse (or better) at position-swap grounding than the ~7B OpenVLA-OFT/pi0 baselines tested in LIBERO-PRO/Plus, which would sharpen the small-VLA-specific novelty positioning?"
+    ],
+    "refuted": [
+      {
+        "claim": "The benchmark isolates grounding/spatial axes (objects layout, camera viewpoints, robot initial states) from perceptual axes (light, background textures, sensor noise) and from language, across seven controlled perturbation dimensions, providing exactly the grounding-vs-perceptual decomposition the research question needs.",
+        "vote": "1-2",
+        "source": "https://arxiv.org/abs/2510.13626"
+      },
+      {
+        "claim": "VLA models are largely insensitive to language and tend to ignore instructions entirely, functioning as de-facto vision-action models — meaning naive language conditioning is unlikely to help and confirms a real grounding/language-utilization gap, consistent with the user's null result on FiLM-conditioning the vision gate.",
+        "vote": "0-3",
+        "source": "https://arxiv.org/abs/2510.13626"
+      },
+      {
+        "claim": "VLABench targets world-knowledge/common-sense transfer and natural-language instructions with implicit human intentions (non-templated), meaning it probes instruction-semantic grounding generalization rather than spatial position-swap robustness specifically — so it does not directly cover the position-swap collapse axis central to the StableVLA grounding question.",
+        "vote": "1-2",
+        "source": "https://arxiv.org/html/2412.18194v1"
+      }
+    ],
+    "sources": [
+      {
+        "url": "https://arxiv.org/abs/2510.03827",
+        "quality": "primary",
+        "angle": "benchmarks: grounding vs perceptual robustness axes",
+        "claimCount": 5
+      },
+      {
+        "url": "https://arxiv.org/abs/2510.13626",
+        "quality": "primary",
+        "angle": "benchmarks: grounding vs perceptual robustness axes",
+        "claimCount": 5
+      },
+      {
+        "url": "https://arxiv.org/html/2412.18194v1",
+        "quality": "primary",
+        "angle": "benchmarks: grounding vs perceptual robustness axes",
+        "claimCount": 4
+      },
+      {
+        "url": "https://arxiv.org/abs/2402.08191",
+        "quality": "primary",
+        "angle": "benchmarks: grounding vs perceptual robustness axes",
+        "claimCount": 4
+      },
+      {
+        "url": "https://arxiv.org/pdf/2510.00037",
+        "quality": "unreliable",
+        "angle": "benchmarks: grounding vs perceptual robustness axes",
+        "claimCount": 0
+      },
+      {
+        "url": "https://github.com/sylvestf/LIBERO-plus",
+        "quality": "primary",
+        "angle": "benchmarks: grounding vs perceptual robustness axes",
+        "claimCount": 5
+      },
+      {
+        "url": "https://arxiv.org/abs/2502.19250",
+        "quality": "primary",
+        "angle": "auxiliary detector-pseudo-label grounding / spatial heads for policies",
+        "claimCount": 5
+      },
+      {
+        "url": "https://arxiv.org/abs/2508.10333",
+        "quality": "primary",
+        "angle": "auxiliary detector-pseudo-label grounding / spatial heads for policies",
+        "claimCount": 5
+      },
+      {
+        "url": "https://arxiv.org/abs/2406.10721",
+        "quality": "primary",
+        "angle": "auxiliary detector-pseudo-label grounding / spatial heads for policies",
+        "claimCount": 5
+      },
+      {
+        "url": "https://arxiv.org/html/2603.22760v1",
+        "quality": "unreliable",
+        "angle": "auxiliary detector-pseudo-label grounding / spatial heads for policies",
+        "claimCount": 0
+      },
+      {
+        "url": "https://arxiv.org/abs/2411.16959",
+        "quality": "unreliable",
+        "angle": "counterfactual / shortcut-breaking augmentation without teleop",
+        "claimCount": 0
+      },
+      {
+        "url": "https://arxiv.org/abs/2508.06426",
+        "quality": "primary",
+        "angle": "counterfactual / shortcut-breaking augmentation without teleop",
+        "claimCount": 5
+      },
+      {
+        "url": "https://arxiv.org/abs/2405.18917",
+        "quality": "primary",
+        "angle": "counterfactual / shortcut-breaking augmentation without teleop",
+        "claimCount": 5
+      },
+      {
+        "url": "https://arxiv.org/abs/2601.15197",
+        "quality": "primary",
+        "angle": "language-conditioned / conditional information bottleneck in policies",
+        "claimCount": 5
+      },
+      {
+        "url": "https://arxiv.org/html/2605.08526",
+        "quality": "unreliable",
+        "angle": "language-conditioned / conditional information bottleneck in policies",
+        "claimCount": 0
+      },
+      {
+        "url": "https://arxiv.org/html/2502.02853v5",
+        "quality": "primary",
+        "angle": "language-conditioned / conditional information bottleneck in policies",
+        "claimCount": 5
+      },
+      {
+        "url": "https://arxiv.org/abs/2602.17659",
+        "quality": "primary",
+        "angle": "why language conditioning fails / small-VLA grounding null result positioning",
+        "claimCount": 5
+      },
+      {
+        "url": "https://arxiv.org/abs/2601.04052",
+        "quality": "primary",
+        "angle": "why language conditioning fails / small-VLA grounding null result positioning",
+        "claimCount": 5
+      },
+      {
+        "url": "https://arxiv.org/html/2603.06001v1",
+        "quality": "unreliable",
+        "angle": "why language conditioning fails / small-VLA grounding null result positioning",
+        "claimCount": 0
+      },
+      {
+        "url": "https://arxiv.org/html/2510.03827v2",
+        "quality": "unreliable",
+        "angle": "why language conditioning fails / small-VLA grounding null result positioning",
+        "claimCount": 0
+      },
+      {
+        "url": "https://arxiv.org/pdf/2603.00592",
+        "quality": "unreliable",
+        "angle": "why language conditioning fails / small-VLA grounding null result positioning",
+        "claimCount": 0
+      },
+      {
+        "url": "https://arxiv.org/html/2602.06556",
+        "quality": "unreliable",
+        "angle": "why language conditioning fails / small-VLA grounding null result positioning",
+        "claimCount": 0
+      }
+    ],
+    "stats": {
+      "angles": 5,
+      "sourcesFetched": 22,
+      "claimsExtracted": 68,
+      "claimsVerified": 25,
+      "confirmed": 22,
+      "killed": 3,
+      "afterSynthesis": 10,
+      "urlDupes": 1,
+      "budgetDropped": 7,
+      "agentCalls": 104
+    }
+  }
+}
