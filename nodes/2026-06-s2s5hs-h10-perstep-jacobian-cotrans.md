@@ -14,7 +14,7 @@ date-created: 2026-06-04
 date-started: 2026-06-04
 date-completed: 2026-06-04
 tags: [position-swap, reach-commit, per-step-jacobian, controller-gain, co-translation, partial-win, generalization]
-metrics: {reach_metric: min_xy_eef_to_target, eval_ep_per_dim: 50, clean_h10: 0.074, swap_h10: 0.086, task_h10: 0.075, swap_h7: 0.105, swap_h9: 0.134, loc_proj_std_h10: 0.0155, Jinv: '[[65.6,-8.1],[1.6,76.4]]', delta_m: 0.18, verdict: partial-win-first-generalization}
+metrics: {reach_metric: min_xy_eef_to_target, eval_ep_per_dim: 50, clean_h10: 0.076, swap_h10: 0.087, task_h10: 0.081, swap_h7: 0.105, swap_h9: 0.134, loc_proj_std_h10: 0.0155, Jinv: '[[65.6,-8.1],[1.6,76.4]]', delta_m: 0.18, verdict: partial-win-first-generalization}
 ---
 
 # s2s5hs — h10-perstep-jacobian-cotrans
@@ -38,11 +38,11 @@ physics; and the 4× magnitude shows H9 was under-shifting the action. Relabel: 
 Eval = reach metric, blank vision + coord, 50 ep/dim. Code `gib-vla@149411f`.
 
 ## Results
-| dim | H10 min-xy (n≈42–50) | H7 | H9 |
+| dim | H10 min-xy (n=50) | H7 | H9 |
 |---|---|---|---|
-| clean | 0.074 | 0.029 | 0.040 |
-| **swap** | **0.086** | 0.105 | 0.134 |
-| task | 0.075 | — | — |
+| clean | 0.076 | 0.029 | 0.040 |
+| **swap** | **0.087** | 0.105 | 0.134 |
+| task | 0.081 | — | — |
 
 - **swap 0.086 = best of the whole program** (H7 0.105 → H9 0.134 → **H10 0.086**).
 - **clean ≈ swap (0.074 ≈ 0.086), and STABLE across n** (n=10 0.076 → n=27 0.077 → n=42 0.086) — unlike H9
