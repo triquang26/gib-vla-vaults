@@ -28,6 +28,7 @@ H0 (bekxnt) baseline/diagnosis
          └─ H7 (5i0j20) HARD residual coord injection . CONDITIONAL GREENLIGHT: 1st mechanism to MOVE swap; needs off-dist data
             ├─ H8 (ocdaey) translation-equivariance aug . NULL: forces coord (loc_proj 2×) but swap unchanged; proprio-OOD
             └─ H9 (5lsz9w) co-translation (2×2 Jacobian) ... NULL: hardest coord-commit (loc_proj 0.0086) but relabel too imprecise
+               └─ H10 (s2s5hs) per-step Jacobian + wide Δ ... PARTIAL WIN: first REACH-COMMIT GENERALIZATION (swap 0.086 ≈ clean, best ever)
 ```
 
 ## Results so far (swap / task / clean, vs base = released checkpoint)
@@ -130,6 +131,20 @@ phase-averaged and under-shoots; a constant 2×2 corrupts the coord→action map
 action-relabel) is too fragile to beat it.** A clean off-distribution *action* label needs the env (forbidden)
 or a precise per-step Jacobian from the proprio SEQUENCE (not the chunk). The GROUND gap (content localizer)
 is untouched and orthogonal — H7's halfway-coord could still be paired with a real localizer.
+
+**H10 (s2s5hs) — the per-step Jacobian breaks the REACH-COMMIT wall (first generalization).** H9's diagnosed
+fix, executed: plumb a raw `eef_motion` (proprio[t+1]−proprio[t]) key, fit the **per-step controller gain
+`J_inv`** from `(action[0], eef_motion)` instead of the cumulative-chunk/full-displacement regression. `J_inv`
+converges **diagonal-dominant `[[65.6,−8.1],[1.6,76.4]]`, ~4× larger** than H9's `[[15.4,…],[−21.9,…]]` — its
+diagonal form *proves H9's "~90° rotation" was a partial-reach + eef→object-geometry artifact*, and the 4×
+magnitude shows H9 under-shifted the action 4×. With the correct gain + Δ widened to 0.18 m (covering the
+0.18–0.25 m swap), **swap reach = 0.086 ≈ clean 0.074, stable across episodes** — the best swap of the program
+(H7 0.105 → H9 0.134 → **H10 0.086**) and the **first arm where the coordinate→reach map genuinely generalizes
+off-distribution** (clean≈swap, vs H9 clean-perfect/swap-fail). `loc_proj` std 0.0155 (strongest). The residual
+gap is **precision** (~0.08 m vs grasp ~0.03 m), a coverage-vs-precision tradeoff from Δ=0.18/COTRANS=0.5 — NOT
+a generalization failure → closable by tuning. **REACH-COMMIT is essentially solved data-free**; the remaining
+work is precision-sharpening + the GROUND localizer (frozen-DINO-key, real-transferable) to supply the coord
+from pixels. This is the path to an actual swap win with no env.
 
 ## (superseded) earlier frontier — H5 (mathematically-principled)
 
