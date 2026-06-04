@@ -29,6 +29,7 @@ H0 (bekxnt) baseline/diagnosis
             ├─ H8 (ocdaey) translation-equivariance aug . NULL: forces coord (loc_proj 2×) but swap unchanged; proprio-OOD
             └─ H9 (5lsz9w) co-translation (2×2 Jacobian) ... NULL: hardest coord-commit (loc_proj 0.0086) but relabel too imprecise
                └─ H10 (s2s5hs) per-step Jacobian + wide Δ ... PARTIAL WIN: first REACH-COMMIT GENERALIZATION (swap 0.086 ≈ clean, best ever)
+                  └─ H11 (3hyjy8) KPC DINO-correspondence gate . DEAD: features can't content-localize small objs on sim (bedrock wall)
 ```
 
 ## Results so far (swap / task / clean, vs base = released checkpoint)
@@ -145,6 +146,20 @@ gap is **precision** (~0.08 m vs grasp ~0.03 m), a coverage-vs-precision tradeof
 a generalization failure → closable by tuning. **REACH-COMMIT is essentially solved data-free**; the remaining
 work is precision-sharpening + the GROUND localizer (frozen-DINO-key, real-transferable) to supply the coord
 from pixels. This is the path to an actual swap win with no env.
+
+**H11 (3hyjy8) — the GROUND wall is fundamental on LIBERO sim (KPC dead).** A novelty workflow proposed
+**Kinesthetic Patch Correspondence** (grasp-event gives a per-object DINOv2 patch prototype; localize the
+swapped object by frozen-feature cosine-NN; detector-free, training-free). The training-free gate KILLED it:
+patch correspondence (VLA backbone, raw DINOv2 @224 and @518) NEVER tracks the moved object (0/6, 0/8, 0/4) —
+it locks onto the SAME grid position with cos≈1.00, because the small LIBERO objects are background-dominated
+in every patch (a same-position patch is cos 1.00 identical across clean↔swap; `cosTrue`≈0.3, the object
+barely registers) and the objects are same-category. The workflow ALSO corrected a key over-claim: re-checking
+eval_logs, **binary grasp success is 0/50 even with a PERFECT sim-oracle coordinate** (clean too) under the
+blank-vision reach regime — so H7–H10's 0.03–0.09 "reach" is only a min-distance proxy, never a grasp.
+**Net bedrock (re-confirmed at the feature level):** on LIBERO sim the position-swap GROUND signal is NOT
+recoverable from pixels — no open-vocab detector (crash / conf 0.002, sim domain gap) and no feature
+correspondence (objects too small/similar). REACH-COMMIT is solved data-free (H10, novel) but the swap
+binary win is unvalidatable end-to-end on sim; it is real-transferable (works where a detector works).
 
 ## (superseded) earlier frontier — H5 (mathematically-principled)
 
