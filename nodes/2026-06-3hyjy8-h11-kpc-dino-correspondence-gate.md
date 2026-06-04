@@ -3,9 +3,12 @@ id: 3hyjy8
 slug: h11-kpc-dino-correspondence-gate
 type: experiment
 status: completed
-hypothesis: |
-  H11 KPC foundation gate (training-free). The novelty workflow's winner KPC (Kinesthetic Patch Correspondence) claims: the grasp event gives a per-object DINOv2 patch PROTOTYPE (proprioception supplies the grasp pixel), and a swapped object is localized from vision alone by frozen-feature cosine-NN to that prototype — detector-free, label-free, no training, dodging BOTH the sim open-vocab-detector wall AND H6's memorization (H6 measured a TRAINED pooled readout; raw DINOv2 patch correspondence is translation-covariant by architecture). H11 is the cheapest decisive gate BEFORE any build: does frozen DINO-SigLIP patch correspondence actually localize the named object across the clean->swap position change? Render matched clean+swap scenes; take the object's patch feature at its clean image location (object world pos projected via the sim camera — DIAGNOSTIC only, the method uses the kinesthetic grasp pixel) as prototype; on swap, cosine-match the prototype to all patches; check whether the top-match patch lands on the object's true swapped image location (top-1 accuracy / pixel error). GATE: if correspondence reliably tracks the moved object (top-1 on object, cos high) => KPC's grounding substrate is sound => build the full kinesthetic cut-paste + localizer. If it fails (matches the memorized location or a distractor) => raw DINO correspondence also memorizes/confuses => KPC dead, the GROUND wall is deeper than the readout.
-parents: ["[[2026-06-s2s5hs-h10-perstep-jacobian-cotrans]]"]
+hypothesis: 'H11 KPC foundation gate (training-free). The novelty workflow''s winner KPC (Kinesthetic Patch Correspondence) claims: the grasp event gives a per-object DINOv2 patch PROTOTYPE (proprioception supplies the grasp pixel), and a swapped object is localized from vision alone by frozen-feature cosine-NN to that prototype — detector-free, label-free, no training, dodging BOTH the sim open-vocab-detector wall AND H6''s memorization (H6 measured a TRAINED pooled readout; raw DINOv2 patch correspondence is translation-covariant by architecture). H11 is the cheapest decisive gate BEFORE any build: does frozen DINO-SigLIP patch correspondence actually localize the named object across the clean->swap position change? Render matched clean+swap scenes; take the object''s patch feature at its clean image location (object world pos projected via the sim camera — DIAGNOSTIC only, the method uses the kinesthetic grasp pixel) as prototype; on swap, cosine-match the prototype to all patches; check
+  whether the top-match patch lands on the object''s true swapped image location (top-1 accuracy / pixel error). GATE: if correspondence reliably tracks the moved object (top-1 on object, cos high) => KPC''s grounding substrate is sound => build the full kinesthetic cut-paste + localizer. If it fails (matches the memorized location or a distractor) => raw DINO correspondence also memorizes/confuses => KPC dead, the GROUND wall is deeper than the readout.
+
+  '
+parents:
+- '[[2026-06-s2s5hs-h10-perstep-jacobian-cotrans]]'
 links: []
 github-repo: https://github.com/triquang26/gib-vla.git
 github-branch: exp/3hyjy8-h11-kpc-dino-correspondence-gate
@@ -13,8 +16,25 @@ github-commit: kpc-probes
 date-created: 2026-06-04
 date-started: 2026-06-04
 date-completed: 2026-06-04
-tags: [position-swap, ground-gap, dino-correspondence, kinesthetic, training-free, null-result, bedrock-wall]
-metrics: {probe: dino_patch_correspondence, track_vla_backbone: '0/6', track_dinov2_224: '0/8', track_dinov2_518: '0/4', cosTop_sameposition: 0.99, cosTrue_objpatch: 0.3, cause: objects_too_small_background_dominated, verdict: KPC-dead-on-sim-bedrock-wall}
+tags:
+- position-swap
+- ground-gap
+- dino-correspondence
+- kinesthetic
+- training-free
+- null-result
+- bedrock-wall
+metrics:
+  probe: dino_patch_correspondence
+  track_vla_backbone: 0/6
+  track_dinov2_224: 0/8
+  track_dinov2_518: 0/4
+  corrected_rot180_track: 0/8
+  corrected_failmode: scattered_5of8_memorized_3of8
+  cosTrue_objpatch: 0.04-0.68_low
+  cause: objects_too_small_content_no_correspondence
+  projection_bug: rot180_corrected_conclusion_holds
+  verdict: KPC-dead-on-sim-bedrock-wall
 ---
 
 # 3hyjy8 — h11-kpc-dino-correspondence-gate
@@ -69,3 +89,12 @@ method (H10 REACH-COMMIT + a real localizer) is real-transferable but UNVALIDATA
 - [ ] (sim, if pushed) a benchmark whose objects are large enough for patch correspondence, or train a
       LIBERO-specific object segmenter offline — but the latter is the env-crutch the user excludes.
 - [ ] Bank: H7→H10 (REACH-COMMIT method) + H11 (GROUND wall fully characterized) is the complete story.
+
+## Correction (added during H13 — [[2026-06-u0hlhq-h13-vla-self-attention-ground-gate]])
+A **rot180 projection bug** was found in the H11/H12 probes: `get_libero_image` flips the frame 180°, so the
+patch grid is UPRIGHT while `camera_utils` projects in the RAW frame — the prototype/GT patch here was sampled
+at the **180°-opposite (background) patch**, not the object (verified by `scripts/calib_project.py`). H11 was
+**re-run with the corrected GT + the named (instruction-target) object** (`logs/h11_dino_corrected.log`):
+**TRACKS 0/8** still (failure mode shifts from "memorized 7/8" to "scattered/other 5/8 + memorized 3/8"),
+cosTrue 0.04–0.68 (the small object's DINO content does not correspond across the move). **Conclusion unchanged:**
+raw DINO correspondence cannot ground the swapped object on LIBERO sim — now on corrected footing.
