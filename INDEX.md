@@ -6,6 +6,7 @@ Root nodes (no parent) appear here automatically when you run `/exp-new`.
 
 <!-- ROOTS_START -->
 - [[2026-06-bekxnt-h0-stablevla-libero-pro-baseline]] — h0-stablevla-libero-pro-baseline
+- [[2026-06-nzlgms-weq-m0-content-vs-index-gate]] — weq-m0-content-vs-index-gate
 <!-- ROOTS_END -->
 
 ## Conventions
